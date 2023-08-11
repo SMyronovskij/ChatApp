@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ChatApplication.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:work_flow="clr-namespace:ChatApplication.ViewModels;assembly=ChatApplication"
+    Title="Welcome to chat application">
+
+    <ScrollView>
+        <VerticalStackLayout
+            Padding="30,0"
+            Spacing="25"
+            VerticalOptions="Center">
+
+            <Image
+                HeightRequest="200"
+                HorizontalOptions="Center"
+                SemanticProperties.Description="Cute dot net bot waving hi to you!"
+                Source="dotnet_bot.png" />
+
+            <Label
+                FontSize="32"
+                HorizontalOptions="Center"
+                SemanticProperties.HeadingLevel="Level1"
+                Text="Hello, World!" />
+
+            <Label
+                FontSize="18"
+                HorizontalOptions="Center"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                SemanticProperties.HeadingLevel="Level2"
+                Text="Login" />
+
+            <Entry
+                x:Name="LoginEntry"
+                HorizontalOptions="Center"
+                Placeholder="Enter your login"
+                PlaceholderColor="Gray"
+                Text="{Binding Login}"
+                TextColor="White"
+                WidthRequest="300" />
+
+            <Label
+                FontSize="18"
+                HorizontalOptions="Center"
+                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+                SemanticProperties.HeadingLevel="Level2"
+                Text="Password" />
+
+            <Entry
+                x:Name="PasswordEntry"
+                HorizontalOptions="Center"
+                Placeholder="Enter your password"
+                PlaceholderColor="Gray"
+                Text="{Binding Password}"
+                TextColor="White"
+                WidthRequest="300" />
+
+            <Button
+                x:Name="LoginButton"
+                WidthRequest="300"
+                Command="{Binding LoginCommand}"
+                HorizontalOptions="Center"
+                SemanticProperties.Hint="Booooo!"
+                Text="Login" />
+
+            <Button
+                x:Name="RegistrationButton"
+                WidthRequest="300"
+                Command="{Binding RegistrationCommand}"
+                HorizontalOptions="Center"
+                SemanticProperties.Hint="Booooo!"
+                Text="Registration" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ChatApplication.Pages.ChatPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="ChatPage">
+
+    <ContentPage.Resources>
+        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+
+        <toolkit:BoolToObjectConverter
+            x:Key="BoolToObjectConverter"
+            FalseObject="Red"
+            TrueObject="Green" />
+
+        <toolkit:BoolToObjectConverter
+            x:Key="BoolToColorConverter"
+            FalseObject="{StaticResource Cyan100Accent}"
+            TrueObject="{StaticResource Blue100Accent}" />
+
+        <toolkit:BoolToObjectConverter
+            x:Key="BoolToColorStatusText"
+            FalseObject="{StaticResource DisconnectedColor}"
+            TrueObject="{StaticResource ConnectedColor}" />
+
+        <toolkit:BoolToObjectConverter
+            x:Key="BoolToConnectionStatusConverter"
+            FalseObject="Connect"
+            TrueObject="Disconnect" />
+
+        <Style x:Key="MessageBubbleFrameStyle" TargetType="Frame">
+            <Setter Property="Margin" Value="5,5,5,15" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="MinimumHeightRequest" Value="40" />
+            <Setter Property="WidthRequest" Value="250" />
+        </Style>
+
+        <Style x:Key="MessageLabelStyle" TargetType="Label">
+            <Setter Property="Margin" Value="0,5" />
+            <Setter Property="TextColor" Value="White" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+
+        <ResourceDictionary>
+            <DataTemplate x:Key="MessageTemplate">
+                <Grid>
+                    <!--  Mine  -->
+                    <Frame
+                        BackgroundColor="{Binding IsMine, Converter={StaticResource BoolToColorConverter}}"
+                        HorizontalOptions="End"
+                        IsVisible="{Binding IsMine}"
+                        Style="{StaticResource MessageBubbleFrameStyle}">
+                        <Grid Padding="10,0">
+                            <Label
+                                HorizontalTextAlignment="End"
+                                Style="{StaticResource MessageLabelStyle}"
+                                Text="{Binding Message}" />
+                        </Grid>
+                    </Frame>
+
+                    <!--  NOT Mine  -->
+                    <Frame
+                        BackgroundColor="{Binding IsMine, Converter={StaticResource BoolToColorConverter}}"
+                        HorizontalOptions="Start"
+                        IsVisible="{Binding IsMine, Converter={StaticResource InvertedBoolConverter}}"
+                        Style="{StaticResource MessageBubbleFrameStyle}">
+                        <Grid Padding="10,0">
+                            <Label
+                                HorizontalTextAlignment="Start"
+                                Style="{StaticResource MessageLabelStyle}"
+                                Text="{Binding Message}" />
+                        </Grid>
+
+                    </Frame>
+
+                    <Label
+                        FontSize="10"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding CreationDateTime}"
+                        VerticalOptions="End" />
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid
+        x:Name="MainContentGrid"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  Column 0  -->
+        <VerticalStackLayout
+            Grid.Column="0"
+            Padding="30,20"
+            Spacing="25"
+            WidthRequest="400">
+
+            <Label
+                Grid.Column="0"
+                FontSize="18"
+                HorizontalOptions="Center"
+                Text="CHAT"
+                VerticalOptions="Center" />
+
+            <Border
+                Padding="0"
+                BackgroundColor="{StaticResource Gray900}"
+                HorizontalOptions="FillAndExpand"
+                Stroke="{StaticResource Primary}"
+                StrokeThickness="1">
+                <CollectionView
+                    x:Name="MessagesCollectionView"
+                    HeightRequest="400"
+                    ItemTemplate="{StaticResource MessageTemplate}"
+                    ItemsSource="{Binding Messages}" />
+            </Border>
+
+            <Grid HeightRequest="100" HorizontalOptions="FillAndExpand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Editor
+                    x:Name="MessageEditor"
+                    Grid.Column="0"
+                    AutoSize="TextChanges"
+                    FontSize="14"
+                    HorizontalOptions="FillAndExpand"
+                    Placeholder="Enter a message"
+                    Text="{Binding NewMessageText}"
+                    VerticalOptions="FillAndExpand" />
+
+                <Button
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    Command="{Binding SendCommand}"
+                    HorizontalOptions="Center"
+                    SemanticProperties.Hint="Booooo!"
+                    Text="Send"
+                    WidthRequest="80" />
+
+            </Grid>
+        </VerticalStackLayout>
+
+        <!--  Column 1  -->
+        <VerticalStackLayout
+            Grid.Column="1"
+            Padding="30,20"
+            Spacing="25"
+            VerticalOptions="FillAndExpand">
+
+            <Label
+                FontSize="18"
+                HorizontalOptions="Center"
+                Text="Logs"
+                VerticalOptions="Center" />
+
+            <Border
+                Padding="0"
+                BackgroundColor="{StaticResource Gray900}"
+                HeightRequest="200"
+                HorizontalOptions="FillAndExpand"
+                Stroke="{StaticResource Primary}"
+                StrokeThickness="1">
+
+                <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="Fill">
+                    <Label
+                        Margin="10"
+                        FontSize="12"
+                        HorizontalOptions="Start"
+                        LineBreakMode="WordWrap"
+                        MaxLines="0"
+                        Text="{Binding Logs}"
+                        VerticalOptions="Start" />
+                </ScrollView>
+            </Border>
+
+            <Label
+                FontSize="18"
+                HorizontalOptions="Center"
+                Text="{Binding ConnectionStatusText}"
+                TextColor="{Binding IsConnected, Converter={StaticResource BoolToColorStatusText}}"
+                VerticalOptions="Center" />
+
+            <Button
+                Command="{Binding ConnectDisconnectCommand}"
+                HorizontalOptions="End"
+                SemanticProperties.Hint="Booooo!"
+                Text="{Binding IsConnected, Converter={StaticResource BoolToConnectionStatusConverter}}"
+                WidthRequest="120" />
+
+        </VerticalStackLayout>
+
+    </Grid>
+</ContentPage>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ChatApplication.Pages.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="RegisterPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="SimpleTitleLabel" TargetType="Label">
+                <Setter Property="Margin" Value="0,30,0,0" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontSize" Value="18" />
+            </Style>
+
+            <Style x:Key="SimpleEntry" TargetType="Entry">
+                <Setter Property="Margin" Value="20" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="PlaceholderColor" Value="Gray" />
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="WidthRequest" Value="300" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout>
+
+        <Label
+            SemanticProperties.Description="Welcome to dot net Multi platform App UI"
+            SemanticProperties.HeadingLevel="Level2"
+            Style="{StaticResource SimpleTitleLabel}"
+            Text="Login" />
+
+        <Entry
+            x:Name="LoginEntry"
+            Placeholder="Enter your login"
+            Style="{StaticResource SimpleEntry}"
+            Text="{Binding Login}" />
+
+
+        <Label
+            SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+            SemanticProperties.HeadingLevel="Level2"
+            Style="{StaticResource SimpleTitleLabel}"
+            Text="FirstName" />
+
+        <Entry
+            x:Name="FirstNameEntry"
+            Placeholder="Enter your first name"
+            Style="{StaticResource SimpleEntry}"
+            Text="{Binding FirstName}" />
+
+
+        <Label
+            SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+            SemanticProperties.HeadingLevel="Level2"
+            Style="{StaticResource SimpleTitleLabel}"
+            Text="LastName" />
+
+        <Entry
+            x:Name="LastNameEntry"
+            Placeholder="Enter your last name"
+            Style="{StaticResource SimpleEntry}"
+            Text="{Binding LastName}" />
+
+
+        <Label
+            SemanticProperties.Description="Welcome to dot net Multi platform App U I"
+            SemanticProperties.HeadingLevel="Level2"
+            Style="{StaticResource SimpleTitleLabel}"
+            Text="Password" />
+
+        <Entry
+            x:Name="PasswordEntry"
+            Placeholder="Enter your password"
+            Style="{StaticResource SimpleEntry}"
+            Text="{Binding Password}" />
+
+        <Button
+            x:Name="RegistrationButton"
+            Margin="0,20,0,0"
+            Command="{Binding RegisterCommand}"
+            HorizontalOptions="Center"
+            SemanticProperties.Hint="Booooo!"
+            Text="Registration"
+            WidthRequest="300" />
+    </VerticalStackLayout>
+</ContentPage>
