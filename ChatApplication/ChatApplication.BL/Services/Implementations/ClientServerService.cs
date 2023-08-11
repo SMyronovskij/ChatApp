@@ -32,7 +32,7 @@ public class ClientServerService : IClientServerService
         if (ServerIsUp) return false;
 
         if(_tcpListener == null)
-            _tcpListener = new TcpListener(IPAddress.Any, Port);
+            _tcpListener = new TcpListener(IpAddress, Port);
 
         try
         {
