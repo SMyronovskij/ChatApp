@@ -10,6 +10,7 @@ namespace ChatApplication.DAL.Public.Providers.Implementations;
 public class UserDataProvider : IUserDataProvider
 {
     private readonly UserRepository _userRepository;
+
     public UserDataProvider(ApplicationContext context)
     {
         _userRepository = new UserRepository(context);

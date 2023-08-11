@@ -4,12 +4,11 @@ namespace ChatApplication.BL.Services.Interfaces;
 
 public interface IConversationService
 {
+    public Action<ConversationMessage> OnMessageReceived { get; set; }
     bool Connect();
     bool Disconnect();
 
     void SendMessage(ConversationMessage message);
-
-    public Action<ConversationMessage> OnMessageReceived { get; set; }
 
     public List<ConversationMessage> GetConversationMessages();
 }

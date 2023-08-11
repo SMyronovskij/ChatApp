@@ -5,13 +5,13 @@ namespace ChatApplication.Popups;
 public partial class SimplePopup : Popup
 {
     public SimplePopup(string text)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
         TextLabel.Text = text;
     }
 
-    async void OnOKButtonClicked(object? sender, EventArgs e)
+    private async void OnOKButtonClicked(object? sender, EventArgs e)
     {
         await CloseAsync();
     }

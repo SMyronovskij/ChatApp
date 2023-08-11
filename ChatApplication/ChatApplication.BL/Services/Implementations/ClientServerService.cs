@@ -1,5 +1,5 @@
-﻿using System.Net.Sockets;
-using System.Net;
+﻿using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using ChatApplication.BL.Services.Interfaces;
 
@@ -7,23 +7,23 @@ namespace ChatApplication.BL.Services.Implementations;
 
 public class ClientServerService : IClientServerService
 {
+    private const int Port = 5000;
+    private static readonly object Lock = new();
+    private static readonly Dictionary<int, TcpClient> list_clients = new();
     private readonly ILoggerService _loggerService;
-    static readonly object Lock = new();
-    static readonly Dictionary<int, TcpClient> list_clients = new();
 
     private readonly IPAddress IpAddress = IPAddress.Parse("127.0.0.1");
-    private const int Port = 5000;
     private bool _serverOwned;
     private TcpListener? _tcpListener;
-
-    public Action<string> OnMessageReceived { get; set; }
-    public bool ServerIsUp { get; set; }
-    public bool ClientConnected { get; set; }
 
     public ClientServerService(ILoggerService loggerService)
     {
         _loggerService = loggerService;
     }
+
+    public Action<string> OnMessageReceived { get; set; }
+    public bool ServerIsUp { get; set; }
+    public bool ClientConnected { get; set; }
 
     #region Server
 
@@ -31,7 +31,7 @@ public class ClientServerService : IClientServerService
     {
         if (ServerIsUp) return false;
 
-        if(_tcpListener == null)
+        if (_tcpListener == null)
             _tcpListener = new TcpListener(IpAddress, Port);
 
         try
@@ -48,18 +48,21 @@ public class ClientServerService : IClientServerService
             return false;
         }
 
-        if(_tcpListener == null) return false;
+        if (_tcpListener == null) return false;
 
         Task.Run(() =>
         {
             var count = 1;
 
             while (ServerIsUp)
-            {
                 try
                 {
                     var client = _tcpListener.AcceptTcpClient();
-                    lock (Lock) list_clients.Add(count, client);
+                    lock (Lock)
+                    {
+                        list_clients.Add(count, client);
+                    }
+
                     _loggerService.Log("Someone connected!!", LogType.ChatLog);
 
                     var thread = new Thread(HandleClients);
@@ -70,7 +73,6 @@ public class ClientServerService : IClientServerService
                 {
                     // ignored
                 }
-            }
         });
 
         ServerIsUp = true;
@@ -82,20 +84,19 @@ public class ClientServerService : IClientServerService
         var id = (int)o;
         TcpClient client;
 
-        lock (Lock) client = list_clients[id];
+        lock (Lock)
+        {
+            client = list_clients[id];
+        }
 
         while (ServerIsUp)
-        {
             try
             {
                 var stream = client.GetStream();
                 var buffer = new byte[1024];
                 var byte_count = stream.Read(buffer, 0, buffer.Length);
 
-                if (byte_count == 0)
-                {
-                    break;
-                }
+                if (byte_count == 0) break;
 
                 var data = Encoding.ASCII.GetString(buffer, 0, byte_count);
                 Broadcast(data);
@@ -104,8 +105,6 @@ public class ClientServerService : IClientServerService
             {
                 // ignored
             }
-            
-        }
     }
 
     public void ShutdownServer()
@@ -133,9 +132,7 @@ public class ClientServerService : IClientServerService
         lock (Lock)
         {
             foreach (var stream in list_clients.Values.Select(c => c.GetStream()))
-            {
                 stream.Write(buffer, 0, buffer.Length);
-            }
         }
     }
 
@@ -164,7 +161,7 @@ public class ClientServerService : IClientServerService
         {
             return false;
         }
-        
+
         ClientConnected = true;
         return true;
     }
@@ -172,7 +169,7 @@ public class ClientServerService : IClientServerService
     public void ShutdownClient()
     {
         if (!ClientConnected) return;
-        if(_client == null || _clientThread == null || _networkStream == null) return;
+        if (_client == null || _clientThread == null || _networkStream == null) return;
 
         _client.Client.Shutdown(SocketShutdown.Send);
         _clientThread.Join();
@@ -203,9 +200,7 @@ public class ClientServerService : IClientServerService
         int byte_count;
 
         while ((byte_count = ns.Read(receivedBytes, 0, receivedBytes.Length)) > 0)
-        {
             OnMessageReceived?.Invoke(Encoding.ASCII.GetString(receivedBytes, 0, byte_count));
-        }
     }
 
     #endregion

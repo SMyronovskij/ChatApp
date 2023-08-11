@@ -25,10 +25,7 @@ public class ConversationMessage
             ClientName = ClientName
         };
 
-        if (conversationMessageDto.ClientId == null)
-        {
-            conversationMessageDto.ClientId = clientId;
-        }
+        if (conversationMessageDto.ClientId == null) conversationMessageDto.ClientId = clientId;
 
         return conversationMessageDto;
     }

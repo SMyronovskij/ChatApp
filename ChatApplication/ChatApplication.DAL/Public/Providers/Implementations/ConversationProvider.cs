@@ -32,5 +32,4 @@ public class ConversationProvider : IConversationProvider
     {
         return _conversationRepository.AddMessageToConversation(conversationId, message);
     }
-
 }

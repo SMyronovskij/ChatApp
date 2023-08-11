@@ -9,12 +9,12 @@ public class ChatViewModel : BaseViewModel
 {
     private readonly IConversationService _conversationService;
     private readonly ILoggerService _loggerService;
+    private string _connectionStatusText;
+    private bool _isConnected;
     private string _logs;
     private string _newMessageText;
 
     public Action<ConversationMessage> MessageAdded;
-    private bool _isConnected;
-    private string _connectionStatusText;
 
     public ChatViewModel(IConversationService conversationService, ILoggerService loggerService)
     {
@@ -56,13 +56,13 @@ public class ChatViewModel : BaseViewModel
     public string Logs
     {
         get => _logs;
-        set => SetProperty(ref _logs, value, nameof(Logs));
+        set => SetProperty(ref _logs, value);
     }
 
     public string NewMessageText
     {
         get => _newMessageText;
-        set => SetProperty(ref _newMessageText, value, nameof(NewMessageText));
+        set => SetProperty(ref _newMessageText, value);
     }
 
     private void Send()
@@ -93,10 +93,7 @@ public class ChatViewModel : BaseViewModel
 
             var messages = _conversationService.GetConversationMessages();
 
-            foreach (var conversationMessage in messages)
-            {
-                Messages.Add(conversationMessage);
-            }
+            foreach (var conversationMessage in messages) Messages.Add(conversationMessage);
 
             _conversationService.OnMessageReceived += conversationMessage =>
             {
@@ -109,12 +106,8 @@ public class ChatViewModel : BaseViewModel
     private void ConnectDisconnect()
     {
         if (IsConnected)
-        {
             Disconnect();
-        }
         else
-        {
             Connect();
-        }
     }
 }

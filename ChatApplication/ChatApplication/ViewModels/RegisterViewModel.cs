@@ -17,6 +17,16 @@ public class RegisterViewModel : BaseViewModel
         RegisterCommand = new AsyncRelayCommand(RegisterAsync);
     }
 
+    public string Login { get; set; }
+
+    public string FirstName { get; set; }
+
+    public string LastName { get; set; }
+
+    public string Password { get; set; }
+
+    public AsyncRelayCommand RegisterCommand { get; set; }
+
     private async Task RegisterAsync()
     {
         if (string.IsNullOrEmpty(Login)
@@ -38,24 +48,9 @@ public class RegisterViewModel : BaseViewModel
         });
 
         if (registered)
-        {
             await Shell.Current.GoToAsync($"//{nameof(MainPage)}");
-        }
         else
-        {
             await Shell.Current.CurrentPage
                 .ShowPopupAsync(new SimplePopup("Registration failed"));
-        }
     }
-
-    public string Login { get; set; }
-
-    public string FirstName { get; set; }
-
-    public string LastName { get; set; }
-
-    public string Password { get; set; }
-
-    public AsyncRelayCommand RegisterCommand { get; set; }
-
 }

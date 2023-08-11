@@ -8,8 +8,8 @@ namespace ChatApplication.BL.Services.Implementations;
 
 public class AuthorizationService : IAuthorizationService
 {
-    private readonly IUserDataProvider _userDataProvider;
     private readonly IEncryptionService _encryptionService;
+    private readonly IUserDataProvider _userDataProvider;
 
     public AuthorizationService(
         IUserDataProvider userDataProvider,

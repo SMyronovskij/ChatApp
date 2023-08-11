@@ -13,10 +13,7 @@ public class EncryptionService : IEncryptionService
 
         var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(plainText));
         var hashSum = string.Empty;
-        foreach (var b in hash)
-        {
-            hashSum += b.ToString("x2");
-        }
+        foreach (var b in hash) hashSum += b.ToString("x2");
 
         return Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(hashSum + salt));
     }

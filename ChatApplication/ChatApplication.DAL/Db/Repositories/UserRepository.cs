@@ -24,7 +24,7 @@ public class UserRepository
 
         var conversation = new ConversationEntity
         {
-            User = userEntity.Entity,
+            User = userEntity.Entity
         };
         _context.Conversations.Add(conversation);
 

@@ -63,7 +63,7 @@ public class ConversationService : IConversationService
 
     public void SendMessage(ConversationMessage message)
     {
-        if(!_clientServerService.ClientConnected)
+        if (!_clientServerService.ClientConnected)
             return;
 
         message.ClientId = _userService.GetUserData().Id;
@@ -77,6 +77,19 @@ public class ConversationService : IConversationService
 
     public Action<ConversationMessage> OnMessageReceived { get; set; }
 
+    public List<ConversationMessage> GetConversationMessages()
+    {
+        if (_conversation == null)
+            return new List<ConversationMessage>();
+
+        var messages = _conversationProvider.GetMessages(_conversation.Id);
+
+        foreach (var conversationMessage in messages)
+            conversationMessage.IsMine = conversationMessage.ClientId == _userService.GetUserData().Id;
+
+        return messages;
+    }
+
     private void ClientServerServiceOnMessageReceived(string message)
     {
         _loggerService.Log($"Message received: {message}", LogType.ChatLog);
@@ -87,20 +100,5 @@ public class ConversationService : IConversationService
         _conversationProvider.AddMessage(_conversation.Id, conversationMessage.ToDbModel());
 
         OnMessageReceived?.Invoke(conversationMessage);
-    }
-
-    public List<ConversationMessage> GetConversationMessages()
-    {
-        if(_conversation == null)
-            return new List<ConversationMessage>();
-            
-        var messages = _conversationProvider.GetMessages(_conversation.Id);
-
-        foreach (var conversationMessage in messages)
-        {
-            conversationMessage.IsMine = conversationMessage.ClientId == _userService.GetUserData().Id;
-        }
-
-        return messages;
     }
 }

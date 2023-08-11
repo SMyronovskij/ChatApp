@@ -17,17 +17,17 @@ public class MainViewModel : BaseViewModel
         RegistrationCommand = new AsyncRelayCommand(Registration);
     }
 
-    private async Task Registration()
-    {
-        await Shell.Current.GoToAsync("//MainPage/RegisterPage");
-    }
-
     public string Login { get; set; }
 
     public string Password { get; set; }
 
     public AsyncRelayCommand LoginCommand { get; set; }
     public AsyncRelayCommand RegistrationCommand { get; set; }
+
+    private async Task Registration()
+    {
+        await Shell.Current.GoToAsync("//MainPage/RegisterPage");
+    }
 
     private async Task Authorize()
     {
