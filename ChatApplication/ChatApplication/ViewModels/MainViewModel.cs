@@ -22,9 +22,9 @@ public class MainViewModel : BaseViewModel
         await Shell.Current.GoToAsync("//MainPage/RegisterPage");
     }
 
-    public string Login { get; set; } = "admin";
+    public string Login { get; set; }
 
-    public string Password { get; set; } = "1234";
+    public string Password { get; set; }
 
     public AsyncRelayCommand LoginCommand { get; set; }
     public AsyncRelayCommand RegistrationCommand { get; set; }
