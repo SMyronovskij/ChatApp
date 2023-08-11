@@ -65,19 +65,4 @@ public static class MauiProgram
         mauiAppBuilder.Services.AddDbContext<ApplicationContext>();
         return mauiAppBuilder;
     }
-
-    public static MauiAppBuilder RegisterAppServices(this MauiAppBuilder mauiAppBuilder)
-    {
-        mauiAppBuilder.Services.AddSingleton<IUserDataProvider, UserDataProvider>();
-        mauiAppBuilder.Services.AddSingleton<IAuthorizationService, AuthorizationService>();
-        mauiAppBuilder.Services.AddSingleton<IEncryptionService, EncryptionService>();
-        return mauiAppBuilder;
-    }
-
-    public static MauiAppBuilder RegisterViewModels(this MauiAppBuilder mauiAppBuilder)
-    {
-        mauiAppBuilder.Services.AddSingleton<MainViewModel>();
-        mauiAppBuilder.Services.AddSingleton<ChatViewModel>();
-        return mauiAppBuilder;
-    }
 }
